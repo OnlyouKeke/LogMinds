@@ -1,5 +1,17 @@
 namespace LogMinds
 {
+    runtimeclass LogEntry
+    {
+        LogEntry();
+        String Timestamp;
+        String Level;
+        String Source;
+        String Message;
+        String Context;
+        String Raw;
+        Windows.Foundation.IReference<DateTime> OccurredOn;
+    }
+
     [default_interface]
     runtimeclass MainWindow : Microsoft.UI.Xaml.Window
     {
