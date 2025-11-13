@@ -9,7 +9,145 @@
     mc:Ignorable="d"
     Title="LogMinds">
 
-    <Grid>
+    <Grid Padding="16" RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
+        <StackPanel Orientation="Horizontal" Spacing="12">
+            <Button
+                x:Name="OpenLogButton"
+                Click="OnOpenLogClicked"
+                Content="打开日志"
+                HorizontalAlignment="Left" />
+            <Button
+                x:Name="InterpretButton"
+                Click="OnInterpretClicked"
+                Content="LLM解读"
+                IsEnabled="False" />
+            <Button
+                x:Name="ClearFiltersButton"
+                Click="OnClearFilters"
+                Content="重置筛选"
+                IsEnabled="False" />
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <ProgressRing x:Name="LoadingIndicator" IsActive="False" Width="24" Height="24" />
+                <TextBlock x:Name="FileNameText" VerticalAlignment="Center" />
+            </StackPanel>
+        </StackPanel>
+
+        <Grid Grid.Row="1" ColumnSpacing="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBox
+                x:Name="SearchBox"
+                PlaceholderText="搜索关键字"
+                TextChanged="OnSearchTextChanged" />
+
+            <ComboBox
+                x:Name="SeverityCombo"
+                Grid.Column="1"
+                Width="140"
+                SelectionChanged="OnSeverityChanged">
+                <ComboBoxItem Content="全部" IsSelected="True" />
+                <ComboBoxItem Content="Trace" />
+                <ComboBoxItem Content="Debug" />
+                <ComboBoxItem Content="Info" />
+                <ComboBoxItem Content="Warn" />
+                <ComboBoxItem Content="Error" />
+                <ComboBoxItem Content="Fatal" />
+                <ComboBoxItem Content="Critical" />
+            </ComboBox>
+
+            <DatePicker
+                x:Name="StartDatePicker"
+                Grid.Column="2"
+                DateChanged="OnStartDateChanged"
+                PlaceholderText="开始日期" />
+
+            <TimePicker
+                x:Name="StartTimePicker"
+                Grid.Column="3"
+                TimeChanged="OnStartTimeChanged"
+                Visibility="Collapsed" />
+
+            <DatePicker
+                x:Name="EndDatePicker"
+                Grid.Column="4"
+                DateChanged="OnEndDateChanged"
+                PlaceholderText="结束日期" />
+
+            <TimePicker
+                x:Name="EndTimePicker"
+                Grid.Column="5"
+                TimeChanged="OnEndTimeChanged"
+                Visibility="Collapsed" />
+        </Grid>
+
+        <Grid Grid.Row="2" RowSpacing="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid ColumnSpacing="12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="180" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="140" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="220" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="时间" FontWeight="SemiBold" />
+                <TextBlock Grid.Column="1" Text="级别" FontWeight="SemiBold" />
+                <TextBlock Grid.Column="2" Text="来源" FontWeight="SemiBold" />
+                <TextBlock Grid.Column="3" Text="消息" FontWeight="SemiBold" />
+                <TextBlock Grid.Column="4" Text="上下文" FontWeight="SemiBold" />
+            </Grid>
+
+            <ListView
+                x:Name="LogListView"
+                Grid.Row="1"
+                IsItemClickEnabled="True"
+                SelectionMode="Extended">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="local:LogEntry">
+                        <Grid ColumnSpacing="12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="180" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="220" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{x:Bind Timestamp}" TextWrapping="NoWrap" />
+                            <TextBlock Grid.Column="1" Text="{x:Bind Level}" />
+                            <TextBlock Grid.Column="2" Text="{x:Bind Source}" TextWrapping="NoWrap" />
+                            <TextBlock Grid.Column="3" Text="{x:Bind Message}" TextWrapping="Wrap" />
+                            <TextBlock Grid.Column="4" Text="{x:Bind Context}" TextWrapping="WrapWholeWords" />
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+
+        <StackPanel Grid.Row="3" Spacing="8">
+            <TextBlock x:Name="StatsText" />
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="8" Padding="12">
+                <ScrollViewer MaxHeight="180">
+                    <TextBlock x:Name="SummaryBlock" TextWrapping="WrapWholeWords" />
+                </ScrollViewer>
+            </Border>
+        </StackPanel>
     </Grid>
 </Window>
